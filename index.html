@@ -1,0 +1,82 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="public/stylesheets/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="public/stylesheets/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="public/stylesheets/bootstrap-responsive.css">
+	<link rel="stylesheet" type="text/css" href="public/stylesheets/bootstrap-responsive.min.css">
+	<link rel="stylesheet" type="text/css" href="public/stylesheets/style.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	
+	
+	<div id="c">
+		<h3>mensajes</h3>
+		<div id="m">
+			
+			<div class="mensaje">
+				<div class="titulo">el primer mensaje</div>
+				<div class="contenido" name="2">este es el contenido del mensaje</div>
+			</div>
+			<div class="mensaje">
+				<div class="titulo">el primer mensaje</div>
+				<div class="contenido" name="2">este es el contenido del mensaje</div>
+			</div>
+
+		</div>
+		<div id="f">
+			<form id="form">
+				<input id="t1" type="text" name="title" placeholder="titulo" required />
+				<textarea id="c1" name="content" placeholder="mensaje..." required ></textarea>
+				<input type="submit" value="enviar" class="btn-primary"/>
+			</form>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+	<script type="text/javascript">
+
+		var socket = io.connect('http://127.0.0.1:3000');
+		$(document).on('ready', function(){
+			$("#m").on("click", ".mensaje", function() {
+				console.log('click');
+				if($(this).find('.contenido').is(':visible')){
+					$(this).find('.contenido').hide();
+
+				}else{
+					$(this).find('.contenido').show();
+				}
+			});
+		
+
+			var titulo = $('#t1');
+			var contenido = $('#c1');
+
+			$('#form').on('submit',function(event){
+				
+				event.preventDefault();
+				console.log('click');
+				socket.emit('user-message',{
+					titulo : titulo.val(),
+					contenido : contenido.val()
+				});
+				
+			})
+			socket.on('server-user-message', function(data){
+					$('#m').append('<div class=mensaje ><div class=titulo >'+data.titulo+"</div><div class=contenido style='display:none' >"+data.contenido+'</div></div>');
+			});
+
+		} );
+		
+		
+	</script>
+	
+</body>
+</html>
