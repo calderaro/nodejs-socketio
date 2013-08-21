@@ -11,7 +11,7 @@ var express = require('express')
   		res.sendfile(__dirname + '/index.html');
   	});
 
-server.listen(3000);
+server.listen(process.env.PORT || 5000);
 
 
 io.sockets.on('connection',function(socket){
